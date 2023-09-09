@@ -2124,17 +2124,23 @@
   /**
    * Probing not allowed within the position of an obstacle.
    */
-  //#define AVOID_OBSTACLES
+  #define AVOID_OBSTACLES
   #if ENABLED(AVOID_OBSTACLES)
-    #define CLIP_W  23  // Bed clip width, should be padded a few mm over its physical size
-    #define CLIP_H  14  // Bed clip height, should be padded a few mm over its physical size
+    #define CLIP_W  (  4 +   3)  // Bed clip width, should be padded a few mm over its physical size
+    #define CLIP_H  (4.5 + 1.5)  // Bed clip height, should be padded a few mm over its physical size
 
     // Obstacle Rectangles defined as { X1, Y1, X2, Y2 }
-    #define OBSTACLE1 { (X_BED_SIZE) / 4     - (CLIP_W) / 2,                       0, (X_BED_SIZE) / 4     + (CLIP_W) / 2, CLIP_H }
-    #define OBSTACLE2 { (X_BED_SIZE) * 3 / 4 - (CLIP_W) / 2,                       0, (X_BED_SIZE) * 3 / 4 + (CLIP_W) / 2, CLIP_H }
-    #define OBSTACLE3 { (X_BED_SIZE) / 4     - (CLIP_W) / 2, (Y_BED_SIZE) - (CLIP_H), (X_BED_SIZE) / 4     + (CLIP_W) / 2, Y_BED_SIZE }
-    #define OBSTACLE4 { (X_BED_SIZE) * 3 / 4 - (CLIP_W) / 2, (Y_BED_SIZE) - (CLIP_H), (X_BED_SIZE) * 3 / 4 + (CLIP_W) / 2, Y_BED_SIZE }
-
+    #define OBSTACLE1 {                     0, (Y_BED_SIZE * 1 / 3) - (CLIP_H / 2),     CLIP_W, (Y_BED_SIZE * 1 / 3) + (CLIP_H / 2) }
+    #define OBSTACLE2 {                     0, (Y_BED_SIZE * 2 / 3) - (CLIP_H / 2),     CLIP_W, (Y_BED_SIZE * 2 / 3) + (CLIP_H / 2) }
+    #define OBSTACLE3 { (Y_BED_SIZE - CLIP_W), (Y_BED_SIZE * 1 / 3) - (CLIP_H / 2), Y_BED_SIZE, (Y_BED_SIZE * 1 / 3) + (CLIP_H / 2) }
+    #define OBSTACLE4 { (Y_BED_SIZE - CLIP_W), (Y_BED_SIZE * 2 / 3) - (CLIP_H / 2), Y_BED_SIZE, (Y_BED_SIZE * 2 / 3) + (CLIP_H / 2) }
+    //#define OBSTACLE1  { (X_BED_SIZE * 1 / 4) - (CLIP_W / 2),                                   0,                          (X_BED_SIZE * 1 / 4) + (CLIP_W / 2),     CLIP_H }
+    //#define OBSTACLE2  { (X_BED_SIZE * 2 / 4) - (CLIP_W / 2),                                   0,                          (X_BED_SIZE * 2 / 4) + (CLIP_W / 2),     CLIP_H }
+    //#define OBSTACLE3  { (X_BED_SIZE * 3 / 4) - (CLIP_W / 2),                                   0,                          (X_BED_SIZE * 3 / 4) + (CLIP_W / 2),     CLIP_H }
+    //#define OBSTACLE1  { (X_BED_SIZE * 1 / 4) - (CLIP_W / 2),               (Y_BED_SIZE - CLIP_H),                          (X_BED_SIZE * 1 / 4) + (CLIP_W / 2), Y_BED_SIZE }
+    //#define OBSTACLE2  { (X_BED_SIZE * 2 / 4) - (CLIP_W / 2),               (Y_BED_SIZE - CLIP_H),                          (X_BED_SIZE * 2 / 4) + (CLIP_W / 2), Y_BED_SIZE }
+    //#define OBSTACLE3  { (X_BED_SIZE * 3 / 4) - (CLIP_W / 2),               (Y_BED_SIZE - CLIP_H),                          (X_BED_SIZE * 3 / 4) + (CLIP_W / 2), Y_BED_SIZE }
+    
     // The probed grid must be inset for G29 J. This is okay, since it is
     // only used to compute a linear transformation for the mesh itself.
     #define G29J_MESH_TILT_MARGIN ((CLIP_H) + 1)
@@ -2446,7 +2452,7 @@
  *
  *   Caveats: The ending Z should be the same as starting Z.
  */
-//#define NOZZLE_CLEAN_FEATURE
+#define NOZZLE_CLEAN_FEATURE
 
 #if ENABLED(NOZZLE_CLEAN_FEATURE)
   #define NOZZLE_CLEAN_PATTERN_LINE     // Provide 'G12 P0' - a simple linear cleaning pattern
@@ -2464,13 +2470,13 @@
 
   // Specify positions for each tool as { { X, Y, Z }, { X, Y, Z } }
   // Dual hotend system may use { {  -20, (Y_BED_SIZE / 2), (Z_MIN_POS + 1) },  {  420, (Y_BED_SIZE / 2), (Z_MIN_POS + 1) }}
-  #define NOZZLE_CLEAN_START_POINT { {  30, 30, (Z_MIN_POS + 1) } }
-  #define NOZZLE_CLEAN_END_POINT   { { 100, 60, (Z_MIN_POS + 1) } }
+  #define NOZZLE_CLEAN_START_POINT { {  0, -6, (Z_MIN_POS + 1) } }
+  #define NOZZLE_CLEAN_END_POINT   { { 40, -6, (Z_MIN_POS + 1) } }
 
   #if ENABLED(NOZZLE_CLEAN_PATTERN_CIRCLE)
-    #define NOZZLE_CLEAN_CIRCLE_RADIUS 6.5                      // (mm) Circular pattern radius
-    #define NOZZLE_CLEAN_CIRCLE_FN 10                           // Circular pattern circle number of segments
-    #define NOZZLE_CLEAN_CIRCLE_MIDDLE NOZZLE_CLEAN_START_POINT // Middle point of circle
+    #define NOZZLE_CLEAN_CIRCLE_RADIUS 5 // (mm) Circular pattern radius
+    #define NOZZLE_CLEAN_CIRCLE_FN 10    // Circular pattern circle number of segments
+    #define NOZZLE_CLEAN_CIRCLE_MIDDLE (NOZZLE_CLEAN_START_POINT + NOZZLE_CLEAN_END_POINT) / 2 // Middle point of circle
   #endif
 
   // Move the nozzle to the initial position after cleaning
@@ -2480,7 +2486,7 @@
   //#define NOZZLE_CLEAN_NO_Z
 
   // For a purge/clean station mounted on the X axis
-  //#define NOZZLE_CLEAN_NO_Y
+  #define NOZZLE_CLEAN_NO_Y
 
   // Require a minimum hotend temperature for cleaning
   #define NOZZLE_CLEAN_MIN_TEMP 170
