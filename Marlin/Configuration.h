@@ -1540,7 +1540,7 @@
  *     |    [-]    |
  *     O-- FRONT --+
  */
-#define NOZZLE_TO_PROBE_OFFSET { -40, 0, -2.45 }
+#define NOZZLE_TO_PROBE_OFFSET { -40, 0, -1.5 }
 
 // Enable and set to use a specific tool for probing. Disable to allow any tool.
 #define PROBING_TOOL 0
@@ -2470,13 +2470,13 @@
 
   // Specify positions for each tool as { { X, Y, Z }, { X, Y, Z } }
   // Dual hotend system may use { {  -20, (Y_BED_SIZE / 2), (Z_MIN_POS + 1) },  {  420, (Y_BED_SIZE / 2), (Z_MIN_POS + 1) }}
-  #define NOZZLE_CLEAN_START_POINT { {  0, -10, (Z_MIN_POS + 1) } }
-  #define NOZZLE_CLEAN_END_POINT   { { 40,  -2, (Z_MIN_POS + 1) } }
+  #define NOZZLE_CLEAN_START_POINT { {  0, -10, (Z_MIN_POS) + 1 } }
+  #define NOZZLE_CLEAN_END_POINT   { { 40,  -2, (Z_MIN_POS) + 1 } }
 
   #if ENABLED(NOZZLE_CLEAN_PATTERN_CIRCLE)
     #define NOZZLE_CLEAN_CIRCLE_RADIUS 5 // (mm) Circular pattern radius
     #define NOZZLE_CLEAN_CIRCLE_FN 10    // Circular pattern circle number of segments
-    #define NOZZLE_CLEAN_CIRCLE_MIDDLE (NOZZLE_CLEAN_START_POINT + NOZZLE_CLEAN_END_POINT) / 2 // Middle point of circle
+    #define NOZZLE_CLEAN_CIRCLE_MIDDLE { { 20, -6, (Z_MIN_POS) + 1 } } // Middle point of circle
   #endif
 
   // Move the nozzle to the initial position after cleaning
